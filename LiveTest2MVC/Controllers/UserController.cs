@@ -12,9 +12,15 @@ namespace LiveTest2MVC.Controllers
         {
             _context = context;
         }
-        public IActionResult Index()
+        public IActionResult Index(string userRole)
         {
-            var users = _context.Users.ToList();
+            IQueryable<User> query = _context.Users;
+            ViewBag.userRole = userRole;
+            if (!string.IsNullOrEmpty(userRole))
+            {
+                query = query.Where(d => d.Role.ToString() == userRole);
+            }
+            var users = query.ToList();
             
             return View(users);
         }
